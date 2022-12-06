@@ -1,0 +1,4 @@
+﻿TODO:
+ - Corrigir erro 400 relacionado as listas (buscar solução no repositório de exercícios, perguntar sobre na aula)
+ - Decidir a tecnologia de frontend
+ - Projeto FrontEnd contendo para cadastro e etc
