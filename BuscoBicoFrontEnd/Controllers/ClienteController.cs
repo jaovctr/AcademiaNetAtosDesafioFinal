@@ -1,21 +1,48 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.PortableExecutable;
+using BuscoBicoFrontEnd.Models;
+using System.Net.Http.Json;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace BuscoBicoFrontEnd.Controllers
 {
     public class ClienteController : Controller
     {
-        // GET: ClienteController
-        public ActionResult Index()
-        {
-            return View();
-        }
+        string baseurl = "https://localhost:7111/";
+
+        
         public IActionResult CadastrarCliente()
         {
             return View();
         }
+
+        public async Task<ActionResult> ListarCliente()
+        {
+            List<ClienteModel>? clientes = new List<ClienteModel>();
+
+            using (var httpClient = new HttpClient())
+            {
+
+                httpClient.BaseAddress = new Uri(baseurl);
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(
+                                new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await httpClient.GetAsync("api/Clientes");
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var dados = response.Content.ReadAsStringAsync().Result;
+                    clientes = JsonConvert.DeserializeObject<List<ClienteModel>>(dados);
+                }
+
+                return View(clientes);
+            }
+        }
         // GET: ClienteController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult DetailharCliente(int id)
         {
             return View();
         }
@@ -29,10 +56,16 @@ namespace BuscoBicoFrontEnd.Controllers
         // POST: ClienteController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> CadastrarCliente(ClienteModel cliente)
         {
+            
             try
             {
+                using(var httpClient = new HttpClient())
+                {
+                    HttpResponseMessage responseMessage = await httpClient.PostAsJsonAsync(
+                        baseurl + "api/Clientes", cliente);
+                }
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -63,7 +96,7 @@ namespace BuscoBicoFrontEnd.Controllers
         }
 
         // GET: ClienteController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult DeletarCliente(int id)
         {
             return View();
         }
