@@ -1,65 +1,53 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BuscoBicoFrontEnd.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.PortableExecutable;
-using BuscoBicoFrontEnd.Models;
-using System.Net.Http.Json;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
-
 namespace BuscoBicoFrontEnd.Controllers
 {
-    public class ClienteController : Controller
+    public class PrestadorController : Controller
     {
         string baseurl = "https://localhost:7111/";
-
-        public async Task<ActionResult> ListarCliente()
+        // GET: PrestadorController
+        public async Task<IActionResult> ListarPrestador()
         {
-            List<ClienteModel>? clientes = new List<ClienteModel>();
-
+            List<PrestadorModel>? prestadores = new List<PrestadorModel>();
             using (var httpClient = new HttpClient())
             {
-
                 httpClient.BaseAddress = new Uri(baseurl);
                 httpClient.DefaultRequestHeaders.Clear();
                 httpClient.DefaultRequestHeaders.Accept.Add(
-                                new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage response = await httpClient.GetAsync("api/Clientes");
-
-
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await httpClient.GetAsync("api/Prestadores");
                 if (response.IsSuccessStatusCode)
                 {
                     var dados = response.Content.ReadAsStringAsync().Result;
-                    clientes = JsonConvert.DeserializeObject<List<ClienteModel>>(dados);
-                }
+                    prestadores = JsonConvert.DeserializeObject<List<PrestadorModel>>(dados);
 
-                return View(clientes);
+                }
+                return View(prestadores);
             }
         }
-        // GET: ClienteController/Details/5
-        public ActionResult DetailharCliente(int id)
+
+        // GET: PrestadorController/Details/5
+        public ActionResult DetalharPrestador(int id)
         {
             return View();
         }
 
-        // GET: ClienteController/Create
-        public ActionResult CadastrarCliente()
+        // GET: PrestadorController/Create
+        public ActionResult Create()
         {
             return View();
         }
 
-        // POST: ClienteController/Create
+        // POST: PrestadorController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CadastrarCliente(ClienteModel cliente)
+        public ActionResult Create(IFormCollection collection)
         {
-            
             try
             {
-                using(var httpClient = new HttpClient())
-                {
-                    HttpResponseMessage responseMessage = await httpClient.PostAsJsonAsync(
-                        baseurl + "api/Clientes", cliente);
-                }
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -68,13 +56,13 @@ namespace BuscoBicoFrontEnd.Controllers
             }
         }
 
-        // GET: ClienteController/Edit/5
+        // GET: PrestadorController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: ClienteController/Edit/5
+        // POST: PrestadorController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -89,13 +77,13 @@ namespace BuscoBicoFrontEnd.Controllers
             }
         }
 
-        // GET: ClienteController/Delete/5
-        public ActionResult DeletarCliente(int id)
+        // GET: PrestadorController/Delete/5
+        public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: ClienteController/Delete/5
+        // POST: PrestadorController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
