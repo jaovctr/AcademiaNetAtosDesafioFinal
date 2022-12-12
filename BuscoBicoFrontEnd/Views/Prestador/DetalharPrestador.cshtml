@@ -1,53 +1,55 @@
 ﻿@model BuscoBicoFrontEnd.Models.PrestadorModel
-
+@{
+    ViewData["Title"] = "Detalhes do Prestador";
+}
+<h1>@ViewData["Title"]</h1>
 <div>
-    <h4>PrestadorModel</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
+            Id:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Id)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
+            Nome:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Nome)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Telefone)
+            Telefone:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Telefone)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
+            E-mail:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Email)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Localizacao)
+            Localização:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Localizacao)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Funcao)
+            Função:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Funcao)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descricao)
+            Descrição:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Descricao)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PrecoDiaria)
+            Valor da diária:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PrecoDiaria)
@@ -55,8 +57,52 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Editar Prestador", "EditarPrestador", new{ }) |
-
-    <a asp-action="Index">Back to List</a>
-    
+    @Html.ActionLink("Editar Prestador", "EditarPrestador", new{ id = Model.Id }) |
+    @Html.ActionLink("Deletar", "DeletarPrestador", new{ id = Model.Id }) |
+    <a asp-action="ListarPrestador">Voltar para a lista</a>   
+    <hr/>
+</div>
+<div>
+    <h5 class="h5">Avaliações</h5>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Autor
+            </th>
+            <th>
+                Comentário
+            </th>
+            <th>
+                Avaliação (0 a 5)
+            </th>
+            <th>
+                Ações
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+            @foreach (var review in Model.Reviews)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(autor => review.Autor.Nome); 
+                    </td>
+                    <td>
+                        @Html.DisplayFor(comentario => review.Comentario);
+                    </td>
+                    <td>
+                        @Html.DisplayFor(avaliacao => review.Avaliacao);
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar","EditarReview", new {id=review.Id})<br>
+                        @Html.ActionLink("Deletar","DeletarReview", new {id=review.Id})
+                    </td>
+                </tr>
+            }                   
+    </tbody>
+</table>
+<div>
+    @Html.ActionLink("Adicionar Avaliação","CadastrarReview","Review",new{id = Model.Id})
 </div>

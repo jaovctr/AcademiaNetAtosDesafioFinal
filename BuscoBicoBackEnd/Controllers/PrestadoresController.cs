@@ -15,9 +15,6 @@ namespace BuscoBicoBackEnd.Controllers
     public class PrestadoresController : ControllerBase
     {
 
-        /* TODO 
-         * corrigir controllers
-        */
         private readonly Context _context;
 
         public PrestadoresController(Context context)
@@ -27,23 +24,37 @@ namespace BuscoBicoBackEnd.Controllers
 
         // GET: api/Prestadores
         [HttpGet]        
-        public async Task<ActionResult<IEnumerable<Prestador>>> GetPrestadores()
+        public async Task<object> GetPrestadores()
         {
-            return await _context.Prestadores.ToListAsync();
+            return await _context.Prestadores.Select(p => new
+            {   
+                p.Id, p.Nome, p.Telefone, p.Email, p.Localizacao, p.Funcao,
+                p.Descricao, p.PrecoDiaria,
+                Review = p.Reviews.Select(r => new 
+                {r.Id, Cliente = r.Autor.Nome,Prestador=r.Prestador.Nome, r.Comentario, r.Avaliacao}).ToList()
+            }).ToListAsync();
         }
 
         // GET: api/Prestadores/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Prestador>> GetPrestador(int id)
+        public async Task<ActionResult<object>> GetPrestador(int id)
         {
-            var prestador = await _context.Prestadores.FindAsync(id);
+            var prestador = await _context.Prestadores.Where(prest => prest.Id == id).Select(
+                p => new
+                {
+                    p.Id,p.Nome, p.Telefone, p.Email,p.Localizacao,p.Funcao,p.Descricao,
+                    p.PrecoDiaria,Review = p.Reviews.Select(r => new
+                    {
+                        r.Id,r.Avaliacao,r.Comentario,Cliente=r.Autor.Nome
+                    }).ToList()
+                }).ToListAsync();
 
             if (prestador == null)
             {
                 return NotFound();
             }
 
-            return prestador;
+            return prestador[0];
         }
 
         // PUT: api/Prestadores/5

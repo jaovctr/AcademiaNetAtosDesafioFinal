@@ -24,10 +24,17 @@ namespace BuscoBicoBackEnd.Controllers
 
         // GET: api/Clientes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
+        public async Task<ActionResult<IEnumerable<object>>> GetClientes()
         {
-            return await _context.Clientes.ToListAsync();
+            return await _context.Clientes.Select(c => new
+            {
+                c.Id, c.Nome, c.Telefone, c.Localizacao,
+                Review = c.Reviews.Select(r => new { r.Id, r.Avaliacao, r.Comentario, Prestador = r.Prestador.Nome })
+                .ToList()
+            }).ToListAsync();
+
         }
+        
 
         // GET: api/Clientes/5
         [HttpGet("{id}")]

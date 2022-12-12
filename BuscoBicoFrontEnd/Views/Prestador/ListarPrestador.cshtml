@@ -34,7 +34,9 @@
             <th>
                 Val. Diária
             </th>
-            <th></th>
+            <th>
+                Ações
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -62,7 +64,7 @@
                 @Html.DisplayFor(modelItem => item.Descricao)
             </td>
             <td>
-                R$: @Html.DisplayFor(modelItem => item.PrecoDiaria)
+                R$: @Html.DisplayFor(modelItem => item.PrecoDiaria),00
             </td>
             <td>
                 @Html.ActionLink("Editar", "EditarPrestador", new {  id=item.Id  })<br>

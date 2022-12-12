@@ -23,10 +23,31 @@ namespace BuscoBicoBackEnd.Controllers
 
         // GET: api/Reviews
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Review>>> GetReviews()
+        public async Task<ActionResult<IEnumerable<object>>> GetReviews()
         {
-            return await _context.Reviews.ToListAsync();
+            return await _context.Reviews.Select(r => new { r.Id, r.Avaliacao, r.Comentario, Prestador = r.Prestador.Nome, Cliente = r.Autor.Nome}).ToListAsync();
         }
+
+        //GET: api/ReviewsDoPrestador/5
+        [HttpGet("ReviewsDoPrestador/{id}")]
+        public async Task<ActionResult<object>> ReviewsDoPrestador(int id) 
+        {
+            var prestador = await _context.Prestadores.Where(prest => prest.Id == id).Select(
+                p => new
+                { 
+                    p.Id,
+                    Reviews = p.Reviews.Select( r => new
+                    {
+                        r.Id,
+                        r.Avaliacao,
+                        r.Comentario,
+                        Autor = new {r.Autor.Id, r.Autor.Nome,r.Autor.Telefone,r.Autor.Localizacao}
+                    }).ToList()
+                }).ToListAsync();
+            
+            return prestador[0].Reviews;
+        }
+
 
         // GET: api/Reviews/5
         [HttpGet("{id}")]
@@ -78,11 +99,17 @@ namespace BuscoBicoBackEnd.Controllers
         [HttpPost]
         public async Task<ActionResult<Review>> PostReview(Review review)
         {
-            _context.Reviews.Add(review);
+            Review revFinal = new Review();
+            revFinal.Comentario= review.Comentario;
+            revFinal.Avaliacao= review.Avaliacao;
+            revFinal.Autor = _context.Clientes.Find(review.Autor.Id);
+            revFinal.Prestador = _context.Prestadores.Find(review.Prestador.Id);
+            _context.Reviews.Add(revFinal);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetReview", new { id = review.Id }, review);
         }
+
 
         // DELETE: api/Reviews/5
         [HttpDelete("{id}")]

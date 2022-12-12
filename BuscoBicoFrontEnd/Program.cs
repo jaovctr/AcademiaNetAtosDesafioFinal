@@ -1,3 +1,4 @@
+﻿using BuscoBicoFrontEnd.Controllers;
 namespace BuscoBicoFrontEnd
 {
     public class Program
@@ -29,6 +30,8 @@ namespace BuscoBicoFrontEnd
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                        
                 
             app.Run();
         }

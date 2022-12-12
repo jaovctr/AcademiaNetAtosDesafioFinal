@@ -1,3 +1,7 @@
+using Microsoft.Build.Framework;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+
 namespace BuscoBicoBackEnd
 {
     public class Program
@@ -14,6 +18,7 @@ namespace BuscoBicoBackEnd
             builder.Services.AddSwaggerGen();
             // Liberar a injeção de dependência
             builder.Services.AddDbContext<Context>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

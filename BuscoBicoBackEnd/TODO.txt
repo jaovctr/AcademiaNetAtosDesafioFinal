@@ -1,3 +1,0 @@
-﻿TODO:
- - Decidir a tecnologia de frontend
- - Projeto FrontEnd contendo cadastro e etc

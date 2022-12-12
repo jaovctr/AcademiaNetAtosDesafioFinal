@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.PortableExecutable;
 using BuscoBicoFrontEnd.Models;
-using System.Net.Http.Json;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 
