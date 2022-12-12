@@ -1,6 +1,7 @@
 ﻿using BuscoBicoFrontEnd.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 namespace BuscoBicoFrontEnd.Controllers
@@ -8,7 +9,7 @@ namespace BuscoBicoFrontEnd.Controllers
     public class PrestadorController : Controller
     {
         string baseurl = "https://localhost:7111/";
-        // GET: PrestadorController
+        // GET: PrestadorController/ListarPrestador OK
         public async Task<IActionResult> ListarPrestador()
         {
             List<PrestadorModel>? prestadores = new List<PrestadorModel>();
@@ -29,19 +30,33 @@ namespace BuscoBicoFrontEnd.Controllers
             }
         }
 
-        // GET: PrestadorController/Details/5
-        public ActionResult DetalharPrestador(int id)
+        // GET: PrestadorController/DetalharPrestador/5 OK
+        public async Task<IActionResult> DetalharPrestador(int id)
         {
-            return View();
+            PrestadorModel? prestador = new PrestadorModel();
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(baseurl);
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage responseMessage = await httpClient.GetAsync("api/Prestadores/" + id);
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    var dados = responseMessage.Content.ReadAsStringAsync().Result;
+                    prestador = JsonConvert.DeserializeObject<PrestadorModel>(dados);
+                }
+            }
+            return View(prestador);
         }
 
-        // GET: PrestadorController/Create
+        // GET: PrestadorController/CriarPrestador OK
         public ActionResult CadastrarPrestador()
         {
             return View();
         }
 
-        // POST: PrestadorController/Create
+        // POST: PrestadorController/CriarPrestador OK
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CadastrarPrestador(PrestadorModel prestador)
@@ -54,7 +69,7 @@ namespace BuscoBicoFrontEnd.Controllers
                     HttpResponseMessage responseMessage = await httpClient.PostAsJsonAsync(
                         baseurl + "api/Prestadores", prestador);
                 }
-                return RedirectToAction(nameof(CadastrarPrestador));
+                return RedirectToAction(nameof(ListarPrestador));
             }
             catch
             {
@@ -62,20 +77,58 @@ namespace BuscoBicoFrontEnd.Controllers
             }
         }
 
-        // GET: PrestadorController/Edit/5
-        public ActionResult Edit(int id)
+        // GET: PrestadorController/EditarPrestador/5 OK
+        public async Task<IActionResult> EditarPrestador(int id)
         {
-            return View();
+            PrestadorModel? prestador = new PrestadorModel();
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(baseurl);
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage responseMessage = await httpClient.GetAsync("api/Prestadores/" + id);
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    var dados = responseMessage.Content.ReadAsStringAsync().Result;
+                    prestador = JsonConvert.DeserializeObject<PrestadorModel>(dados);
+                }
+            }
+            return View(prestador);
         }
 
-        // POST: PrestadorController/Edit/5
+        // POST: PrestadorController/EditarPrestador/5 OK
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> EditarPrestador(int id, PrestadorModel prestadorEditado)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                PrestadorModel? prestador = new PrestadorModel();
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.BaseAddress = new Uri(baseurl);
+                    httpClient.DefaultRequestHeaders.Clear();
+                    httpClient.DefaultRequestHeaders.Accept.Add(
+                        new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage responseMessage = await httpClient.GetAsync("api/Prestadores/" + id);
+                    if (responseMessage.IsSuccessStatusCode)
+                    {
+                        var dados = responseMessage.Content.ReadAsStringAsync().Result;
+                        prestador = JsonConvert.DeserializeObject<PrestadorModel>(dados);
+                        prestador.Nome = prestadorEditado.Nome;
+                        prestador.Telefone = prestadorEditado.Telefone;
+                        prestador.Email = prestadorEditado.Email;
+                        prestador.Localizacao = prestadorEditado.Localizacao;
+                        prestador.Funcao = prestadorEditado.Funcao;
+                        prestador.Descricao = prestadorEditado.Descricao;
+                        prestador.PrecoDiaria = prestadorEditado.PrecoDiaria;
+
+                        responseMessage = await httpClient.PutAsJsonAsync(
+                            baseurl + "api/Prestadores/" + id, prestador);
+                    }
+                }
+                return RedirectToAction(nameof(ListarPrestador));
             }
             catch
             {
@@ -83,20 +136,41 @@ namespace BuscoBicoFrontEnd.Controllers
             }
         }
 
-        // GET: PrestadorController/Delete/5
-        public ActionResult Delete(int id)
+        // GET: PrestadorController/DeletarPrestador/5 OK
+        public async Task<IActionResult> DeletarPrestador(int id)
         {
-            return View();
+            PrestadorModel? prestador = new PrestadorModel();
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(baseurl);
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage responseMessage = await httpClient.GetAsync("api/Prestadores/" + id);
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    var dados = responseMessage.Content.ReadAsStringAsync().Result;
+                    prestador = JsonConvert.DeserializeObject<PrestadorModel>(dados);
+                }
+            }
+            return View(prestador);
         }
 
-        // POST: PrestadorController/Delete/5
+        // POST: PrestadorController/DeletarPrestador/5 OK
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeletarPrestador(int id, PrestadorModel prestadorApagando)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                using(var httpClient = new HttpClient()) {
+                    httpClient.BaseAddress = new Uri(baseurl);
+                    httpClient.DefaultRequestHeaders.Clear();
+                    httpClient.DefaultRequestHeaders.Accept.Add(
+                        new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage responseMessage = await httpClient.DeleteAsync("api/Prestadores/" + id);
+                }
+                return RedirectToAction(nameof(ListarPrestador));
             }
             catch
             {
