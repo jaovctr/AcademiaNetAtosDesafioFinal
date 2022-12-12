@@ -12,7 +12,7 @@ namespace BuscoBicoFrontEnd.Controllers
     {
         string baseurl = "https://localhost:7111/";
 
-        //Index
+        //ClienteController/ListarCliente OK
         public async Task<ActionResult> ListarCliente()
         {
             List<ClienteModel>? clientes = new List<ClienteModel>();
@@ -36,19 +36,32 @@ namespace BuscoBicoFrontEnd.Controllers
                 return View(clientes);
             }
         }
-        // GET: ClienteController/Details/5
-        public ActionResult DetalharCliente(int id)
+        // GET: ClienteController/DetalharCliente/5 OK
+        public async Task<IActionResult> DetalharCliente(int id)
         {
-            return View();
+            ClienteModel? cliente = new ClienteModel();
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(baseurl);
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage responseMessage = await httpClient.GetAsync("api/Clientes/" + id);
+                if (responseMessage.IsSuccessStatusCode){
+                    var dados = responseMessage.Content.ReadAsStringAsync().Result;
+                    cliente = JsonConvert.DeserializeObject<ClienteModel>(dados);
+                }
+            }
+            return View(cliente);
         }
 
-        // GET: ClienteController/Create
+        // GET: ClienteController/CriarCliente OK
         public ActionResult CadastrarCliente()
         {
             return View();
         }
 
-        // POST: ClienteController/Create
+        // POST: ClienteController/CriarCliente OK
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CadastrarCliente(ClienteModel cliente)
@@ -69,20 +82,55 @@ namespace BuscoBicoFrontEnd.Controllers
             }
         }
 
-        // GET: ClienteController/Edit/5
-        public ActionResult EditarCliente(int id)
+        // GET: ClienteController/EditarCliente/5 OK
+        public async Task<IActionResult> EditarCliente(int id)
         {
-            return View();
+            ClienteModel? cliente = new ClienteModel();
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(baseurl);
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage responseMessage = await httpClient.GetAsync("api/Clientes/" + id);
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    var dados = responseMessage.Content.ReadAsStringAsync().Result;
+                    cliente = JsonConvert.DeserializeObject<ClienteModel>(dados);
+                }
+            }
+            return View(cliente);
         }
 
-        // POST: ClienteController/Edit/5
+        // POST: ClienteController/EditarCliente/5 OK
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditarCliente(int id, IFormCollection collection)
+        public async Task<IActionResult> EditarCliente(int id, ClienteModel clienteEditado)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                ClienteModel? cliente = new ClienteModel();
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.BaseAddress = new Uri(baseurl);
+                    httpClient.DefaultRequestHeaders.Clear();
+                    httpClient.DefaultRequestHeaders.Accept.Add(
+                        new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage responseMessage = await httpClient.GetAsync("api/Clientes/" + id);
+                    if (responseMessage.IsSuccessStatusCode)
+                    {
+                        var dados = responseMessage.Content.ReadAsStringAsync().Result;
+                        cliente = JsonConvert.DeserializeObject<ClienteModel>(dados);
+                        cliente.Nome = clienteEditado.Nome;
+                        cliente.Telefone = clienteEditado.Telefone;
+                        cliente.Localizacao = clienteEditado.Localizacao;
+
+                        responseMessage = await httpClient.PutAsJsonAsync(
+                       baseurl + "api/Clientes/"+id, cliente);
+                    }
+                }
+                
+                return RedirectToAction(nameof(ListarCliente));
             }
             catch
             {
@@ -90,19 +138,43 @@ namespace BuscoBicoFrontEnd.Controllers
             }
         }
 
-        // GET: ClienteController/Delete/5
-        public ActionResult DeletarCliente(int id)
+        // GET: ClienteController/DeletarCliente/5 OK
+        public async Task<IActionResult> DeletarCliente(int id)
         {
-            return View();
+            ClienteModel? cliente = new ClienteModel();
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(baseurl);
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage responseMessage = await httpClient.GetAsync("api/Clientes/" + id);
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    var dados = responseMessage.Content.ReadAsStringAsync().Result;
+                    cliente = JsonConvert.DeserializeObject<ClienteModel>(dados);
+                }
+            }
+            return View(cliente);
         }
 
-        // POST: ClienteController/Delete/5
+        // POST: ClienteController/Delete/5 OK
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeletarCliente(int id, IFormCollection collection)
+        public async Task<IActionResult> DeletarCliente(int id,ClienteModel clienteApagando)
         {
             try
             {
+                
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.BaseAddress = new Uri(baseurl);
+                    httpClient.DefaultRequestHeaders.Clear();
+                    httpClient.DefaultRequestHeaders.Accept.Add(
+                        new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage responseMessage = await httpClient.DeleteAsync("api/Clientes/" + id);
+                    
+                }
                 return RedirectToAction(nameof(ListarCliente));
             }
             catch

@@ -11,18 +11,20 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                Id
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nome)
+                Nome
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Telefone)
+                Telefone
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Localizacao)
+                Localização
             </th>
-            <th></th>
+            <th>
+                Ações
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -41,10 +43,9 @@
                 @Html.DisplayFor(modelItem => item.Localizacao)
             </td>
             <td>                   
-                @Html.ActionLink("Editar", "EditarCliente", new { /* id=item.PrimaryKey */ }) <br>
-                @Html.ActionLink("Detalhar", "DetalharCliente", new { /* id=item.PrimaryKey */ }) <br>
-                @Html.ActionLink("Deletar", "DeletarCliente", new { /* id=item.PrimaryKey */ })
-      
+                @Html.ActionLink("Editar", "EditarCliente", new {  id=item.Id  }) <br>
+                @Html.ActionLink("Detalhar", "DetalharCliente", new { id=item.Id }) <br>
+                @Html.ActionLink("Deletar", "DeletarCliente", new { id=item.Id })      
             </td>
         </tr>
 }
