@@ -12,6 +12,7 @@ namespace BuscoBicoFrontEnd.Controllers
     {
         string baseurl = "https://localhost:7111/";
 
+        //Index
         public async Task<ActionResult> ListarCliente()
         {
             List<ClienteModel>? clientes = new List<ClienteModel>();
@@ -36,7 +37,7 @@ namespace BuscoBicoFrontEnd.Controllers
             }
         }
         // GET: ClienteController/Details/5
-        public ActionResult DetailharCliente(int id)
+        public ActionResult DetalharCliente(int id)
         {
             return View();
         }
@@ -52,7 +53,7 @@ namespace BuscoBicoFrontEnd.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CadastrarCliente(ClienteModel cliente)
         {
-            
+            cliente.Reviews = new List<ReviewModel>();
             try
             {
                 using(var httpClient = new HttpClient())
@@ -60,7 +61,7 @@ namespace BuscoBicoFrontEnd.Controllers
                     HttpResponseMessage responseMessage = await httpClient.PostAsJsonAsync(
                         baseurl + "api/Clientes", cliente);
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ListarCliente));
             }
             catch
             {
@@ -69,7 +70,7 @@ namespace BuscoBicoFrontEnd.Controllers
         }
 
         // GET: ClienteController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult EditarCliente(int id)
         {
             return View();
         }
@@ -77,7 +78,7 @@ namespace BuscoBicoFrontEnd.Controllers
         // POST: ClienteController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult EditarCliente(int id, IFormCollection collection)
         {
             try
             {
@@ -98,11 +99,11 @@ namespace BuscoBicoFrontEnd.Controllers
         // POST: ClienteController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeletarCliente(int id, IFormCollection collection)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ListarCliente));
             }
             catch
             {

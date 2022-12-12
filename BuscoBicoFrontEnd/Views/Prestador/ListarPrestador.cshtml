@@ -1,34 +1,38 @@
 ﻿@model IEnumerable<BuscoBicoFrontEnd.Models.PrestadorModel>
-
+@{
+    ViewData["Title"] = "Listar Prestadores";
+}
+<h1>@ViewData["Title"]</h1>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-secondary" asp-controller="Prestador" asp-action="CadastrarPrestador">Cadastrar Prestador</a>
+    <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Início</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                Id
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nome)
+                Nome
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Telefone)
+                Telefone
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                E-mail
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Localizacao)
+                Localização
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Funcao)
+                Função
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Descricao)
+                Descrição
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PrecoDiaria)
+                Val. Diária
             </th>
             <th></th>
         </tr>
@@ -58,12 +62,12 @@
                 @Html.DisplayFor(modelItem => item.Descricao)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PrecoDiaria)
+                R$: @Html.DisplayFor(modelItem => item.PrecoDiaria)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Editar", "EditarPrestador", new {  id=item.Id  })<br>
+                @Html.ActionLink("Detalhes", "DetalharPrestador", new { id=item.Id })<br>
+                @Html.ActionLink("Deletar", "DeletarPrestador", new {  id=item.Id  })
             </td>
         </tr>
 }

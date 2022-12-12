@@ -36,7 +36,7 @@ namespace BuscoBicoFrontEnd.Controllers
         }
 
         // GET: PrestadorController/Create
-        public ActionResult Create()
+        public ActionResult CadastrarPrestador()
         {
             return View();
         }
@@ -44,11 +44,17 @@ namespace BuscoBicoFrontEnd.Controllers
         // POST: PrestadorController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> CadastrarPrestador(PrestadorModel prestador)
         {
+            prestador.Reviews = new List<ReviewModel>();            
             try
             {
-                return RedirectToAction(nameof(Index));
+                using(var httpClient = new HttpClient())
+                {
+                    HttpResponseMessage responseMessage = await httpClient.PostAsJsonAsync(
+                        baseurl + "api/Prestadores", prestador);
+                }
+                return RedirectToAction(nameof(CadastrarPrestador));
             }
             catch
             {
