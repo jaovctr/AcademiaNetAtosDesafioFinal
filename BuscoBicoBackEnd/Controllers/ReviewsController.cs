@@ -49,7 +49,7 @@ namespace BuscoBicoBackEnd.Controllers
         }
 
 
-        // GET: api/Reviews/5 testar
+        // GET: api/Reviews/5 OK
         [HttpGet("{id}")]
         public async Task<ActionResult<object>> GetReview(int id)
         {
@@ -57,7 +57,7 @@ namespace BuscoBicoBackEnd.Controllers
                 r=> new
                 {
                     r.Id,r.Avaliacao, r.Comentario,
-                    Cliente= new { r.Autor.Id, r.Autor.Nome, r.Autor.Telefone, r.Autor.Localizacao },
+                    Autor= new { r.Autor.Id, r.Autor.Nome, r.Autor.Telefone, r.Autor.Localizacao},
                     Prestador = new {r.Prestador.Id, r.Prestador.Nome,r.Prestador.Telefone,r.Prestador.Email,
                     r.Prestador.Localizacao,r.Prestador.Funcao,r.Prestador.Descricao,r.Prestador.PrecoDiaria}
                 }).ToListAsync();
@@ -70,7 +70,7 @@ namespace BuscoBicoBackEnd.Controllers
             return review[0];
         }
 
-        // PUT: api/Reviews/5
+        // PUT: api/Reviews/5 OK
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutReview(int id, Review review)
@@ -79,17 +79,15 @@ namespace BuscoBicoBackEnd.Controllers
             {
                 return BadRequest();
             }
+            Cliente c = _context.Clientes.Find(review.Autor.Id);
+            Prestador p = _context.Prestadores.Find(review.Prestador.Id);
+            review.Autor = c;
+            review.Prestador = p;
 
             _context.Entry(review).State = EntityState.Modified;
 
             try
             {
-                Review revFinal = new Review();
-                revFinal.Comentario = review.Comentario;
-                revFinal.Avaliacao = review.Avaliacao;
-                revFinal.Autor = _context.Clientes.Find(review.Autor.Id);
-                revFinal.Prestador = _context.Prestadores.Find(review.Prestador.Id);
-                _context.Reviews.Add(revFinal);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -107,7 +105,7 @@ namespace BuscoBicoBackEnd.Controllers
             return NoContent();
         }
 
-        // POST: api/Reviews 
+        // POST: api/Reviews OK
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Review>> PostReview(Review review)
@@ -124,7 +122,7 @@ namespace BuscoBicoBackEnd.Controllers
         }
 
 
-        // DELETE: api/Reviews/5
+        // DELETE: api/Reviews/5 testar
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReview(int id)
         {

@@ -22,7 +22,7 @@
                 <textarea asp-for="Review.Comentario" class="form-control" rows="3"></textarea>
             </div>
             <div>
-                <label asp-for="Review.Avaliacao" class="control-label">Avaliação</label>
+                <label asp-for="Review.Avaliacao" class="control-label">Avaliação:</label>
                 <input asp-for="Review.Avaliacao" class="form-control" max="10" min="0" />
                 <span asp-validation-for="Review.Avaliacao" class="text-danger"></span>
             </div>
@@ -36,7 +36,8 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <br>
+    <a class="btn btn-secondary" asp-action="ListarPrestador" asp-controller="Prestador">Voltar para a lista</a>
 </div>
 
 @section Scripts {
