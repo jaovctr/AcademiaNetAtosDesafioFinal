@@ -134,6 +134,7 @@ namespace BuscoBicoFrontEnd.Controllers
                         prestador.Funcao = prestadorEditado.Funcao;
                         prestador.Descricao = prestadorEditado.Descricao;
                         prestador.PrecoDiaria = prestadorEditado.PrecoDiaria;
+                        prestador.Reviews = new List<ReviewModel>();
 
                         responseMessage = await httpClient.PutAsJsonAsync(
                             baseurl + "api/Prestadores/" + id, prestador);

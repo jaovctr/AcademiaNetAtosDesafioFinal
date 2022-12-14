@@ -122,7 +122,7 @@ namespace BuscoBicoFrontEnd.Controllers
                         cliente.Nome = clienteEditado.Nome;
                         cliente.Telefone = clienteEditado.Telefone;
                         cliente.Localizacao = clienteEditado.Localizacao;
-
+                        cliente.Reviews = new List<ReviewModel>();
                         responseMessage = await httpClient.PutAsJsonAsync(
                        baseurl + "api/Clientes/"+id, cliente);
                     }

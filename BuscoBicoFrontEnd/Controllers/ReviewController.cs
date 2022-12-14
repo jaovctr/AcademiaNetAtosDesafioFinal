@@ -172,7 +172,7 @@ namespace BuscoBicoFrontEnd.Controllers
             }
         }
 
-        // GET: ReviewController/Delete/5
+        // GET: ReviewController/Delete/5 OK
         public async Task<IActionResult> DeletarReview(int id)
         {
             ReviewModel review = new ReviewModel();
@@ -192,7 +192,7 @@ namespace BuscoBicoFrontEnd.Controllers
             }
         }
 
-        // POST: ReviewController/DeletarReview/5
+        // POST: ReviewController/DeletarReview/5 OK
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletarReview(int id, ReviewModel reviewApagar)
