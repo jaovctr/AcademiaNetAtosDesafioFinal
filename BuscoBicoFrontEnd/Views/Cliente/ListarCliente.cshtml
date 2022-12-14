@@ -4,8 +4,8 @@
 }
 <h1>@ViewData["Title"]</h1>
 <p>
-    <a class="btn btn-secondary" asp-controller="Cliente" asp-action="CadastrarCliente">Cadastrar Cliente</a>
-    <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Início</a>
+    <a class="btn btn-outline-dark" asp-controller="Cliente" asp-action="CadastrarCliente">Cadastrar Cliente</a>
+    <a class="btn btn-outline-dark" asp-controller="Home" asp-action="Index">Início</a>
 </p>
 <table class="table">
     <thead>
@@ -43,9 +43,9 @@
                 @Html.DisplayFor(modelItem => item.Localizacao)
             </td>
             <td>                   
-                @Html.ActionLink("Editar", "EditarCliente", new {  id=item.Id  }) <br>
-                @Html.ActionLink("Detalhar", "DetalharCliente", new { id=item.Id }) <br>
-                @Html.ActionLink("Deletar", "DeletarCliente", new { id=item.Id })      
+                    @Html.ActionLink("Editar", "EditarCliente", new {  id=item.Id  },new{@class="btn btn-sm btn-outline-dark"}) 
+                    @Html.ActionLink("Detalhar", "DetalharCliente", new { id=item.Id },new{@class="btn btn-sm btn-outline-dark"}) 
+                    @Html.ActionLink("Deletar", "DeletarCliente", new { id=item.Id },new{@class="btn btn-sm btn-outline-dark"})
             </td>
         </tr>
 }

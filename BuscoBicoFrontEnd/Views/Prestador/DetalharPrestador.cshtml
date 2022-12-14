@@ -57,9 +57,9 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Editar Prestador", "EditarPrestador", new{ id = Model.Id }) |
-    @Html.ActionLink("Deletar", "DeletarPrestador", new{ id = Model.Id }) |
-    <a asp-action="ListarPrestador">Voltar para a lista</a>   
+    @Html.ActionLink("Editar Prestador", "EditarPrestador", new{ id = Model.Id }, new{@class="btn btn-outline-dark"})
+    @Html.ActionLink("Deletar", "DeletarPrestador", new{ id = Model.Id },new{@class="btn btn-outline-dark"})
+    <a class="btn btn-outline-dark" asp-action="ListarPrestador">Voltar para a lista</a>   
     <hr/>
 </div>
 <div>
@@ -96,13 +96,14 @@
                         @Html.DisplayFor(avaliacao => review.Avaliacao)
                     </td>
                     <td>
-                        @Html.ActionLink("Editar","EditarReview", "Review",new {id=review.Id})<br>
-                        @Html.ActionLink("Deletar","DeletarReview", "Review", new {id=review.Id})
+                    @Html.ActionLink("Editar","EditarReview", "Review",new {id=review.Id},new{@class="btn btn-sm btn-outline-dark"})
+                    @Html.ActionLink("Deletar","DeletarReview", "Review", new {id=review.Id},new{@class="btn btn-sm btn-outline-dark"})
                     </td>
                 </tr>
             }                   
     </tbody>
 </table>
 <div>
-    @Html.ActionLink("Adicionar Avaliação","CadastrarReview","Review",new{id = Model.Id})
+    @Html.ActionLink("Adicionar Avaliação","CadastrarReview","Review",new{id = Model.Id},new{@class="btn btn-outline-dark"})
+    
 </div>

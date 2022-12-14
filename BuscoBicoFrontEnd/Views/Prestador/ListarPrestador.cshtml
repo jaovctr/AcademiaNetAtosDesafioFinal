@@ -4,8 +4,8 @@
 }
 <h1>@ViewData["Title"]</h1>
 <p>
-    <a class="btn btn-secondary" asp-controller="Prestador" asp-action="CadastrarPrestador">Cadastrar Prestador</a>
-    <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Início</a>
+    <a class="btn btn-outline-dark" asp-controller="Prestador" asp-action="CadastrarPrestador">Cadastrar Prestador</a>
+    <a class="btn btn-outline-dark" asp-controller="Home" asp-action="Index">Início</a>
 </p>
 <table class="table">
     <thead>
@@ -67,9 +67,9 @@
                 R$: @Html.DisplayFor(modelItem => item.PrecoDiaria),00
             </td>
             <td>
-                @Html.ActionLink("Editar", "EditarPrestador", new {  id=item.Id  })<br>
-                @Html.ActionLink("Detalhes", "DetalharPrestador", new { id=item.Id })<br>
-                @Html.ActionLink("Deletar", "DeletarPrestador", new {  id=item.Id  })
+                    @Html.ActionLink("Editar", "EditarPrestador", new {  id=item.Id  },new{@class="btn btn-sm btn-outline-dark"})
+                    @Html.ActionLink("Detalhes", "DetalharPrestador", new { id=item.Id },new{@class="btn btn-sm btn-outline-dark"})
+                    @Html.ActionLink("Deletar", "DeletarPrestador", new {  id=item.Id  },new{@class="btn btn-sm btn-outline-dark"})
             </td>
         </tr>
 }
