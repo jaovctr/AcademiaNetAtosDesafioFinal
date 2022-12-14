@@ -22,7 +22,7 @@ namespace BuscoBicoFrontEnd.Controllers
             return View();
         }
 
-        // GET: ReviewController/CriarReview
+        // GET: ReviewController/CriarReview 
         public async Task<IActionResult> CadastrarReview(int id)
         {
             PrestadorModel? prestador = new PrestadorModel();
@@ -55,7 +55,7 @@ namespace BuscoBicoFrontEnd.Controllers
             return View(viewModel);
         }
 
-        // POST: ReviewController/Create
+        // POST: ReviewController/Create 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CadastrarReview(PrestadorReviewModel reviewCriada)
@@ -97,20 +97,69 @@ namespace BuscoBicoFrontEnd.Controllers
             }
         }
 
-        // GET: ReviewController/Edit/5
-        public ActionResult Edit(int id)
+        // GET: ReviewController/Edit/5 testar
+        public async Task<IActionResult> EditarReview(int id)
         {
-            return View();
+            PrestadorReviewModel? reviewModel = new PrestadorReviewModel();
+            ReviewModel? review = new ReviewModel();
+            using(var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(baseurl);
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage responseMessage = await httpClient.GetAsync("api/reviews/" + id);
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    var dados = responseMessage.Content.ReadAsStringAsync().Result;
+                    review = JsonConvert.DeserializeObject<ReviewModel>(dados);
+                    reviewModel.Review = review;
+                }
+
+                return View(reviewModel);
+
+            }
+       
         }
 
-        // POST: ReviewController/Edit/5
+        // POST: ReviewController/Edit/5 testar
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> EditarReview(int id, PrestadorReviewModel reviewModel)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                ReviewModel? review = new ReviewModel();
+                using(var httpClient = new HttpClient())
+                {
+                    httpClient.BaseAddress = new Uri(baseurl);
+                    httpClient.DefaultRequestHeaders.Clear();
+                    httpClient.DefaultRequestHeaders.Accept.Add(
+                        new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage responseMessage = await httpClient.GetAsync("api/Reviews/" + id);
+                    if(responseMessage.IsSuccessStatusCode)
+                    {
+                        var dados = responseMessage.Content.ReadAsStringAsync().Result;
+                        review = JsonConvert.DeserializeObject<ReviewModel>(dados);
+                        review.Avaliacao = reviewModel.Review.Avaliacao;
+                        review.Comentario = reviewModel.Review.Comentario;
+                    }
+                    responseMessage = await httpClient.GetAsync("api/Prestadores" + reviewModel.IdPrestador);
+                    if (responseMessage.IsSuccessStatusCode)
+                    {
+                        var dados = responseMessage.Content.ReadAsStringAsync().Result;
+                        review.Prestador = JsonConvert.DeserializeObject<PrestadorModel>(dados);
+                    }
+                    responseMessage = await httpClient.GetAsync("api/Clientes/" + reviewModel.IdCliente);
+                    if (responseMessage.IsSuccessStatusCode)
+                    {
+                        var dados = responseMessage.Content.ReadAsStringAsync().Result;
+                        review.Autor = JsonConvert.DeserializeObject<ClienteModel>(dados);
+                    }
+                    responseMessage = await httpClient.PutAsJsonAsync(
+                        baseurl + "api/Reviews/" + id, review);
+                }
+                return RedirectToAction("ListarPrestador", "Prestador");
             }
             catch
             {
@@ -119,7 +168,7 @@ namespace BuscoBicoFrontEnd.Controllers
         }
 
         // GET: ReviewController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult DelletarReview(int id)
         {
             return View();
         }

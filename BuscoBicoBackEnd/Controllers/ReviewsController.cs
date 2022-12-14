@@ -21,14 +21,14 @@ namespace BuscoBicoBackEnd.Controllers
             _context = context;
         }
 
-        // GET: api/Reviews
+        // GET: api/Reviews OK
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetReviews()
         {
             return await _context.Reviews.Select(r => new { r.Id, r.Avaliacao, r.Comentario, Prestador = r.Prestador.Nome, Cliente = r.Autor.Nome}).ToListAsync();
         }
 
-        //GET: api/ReviewsDoPrestador/5
+        //GET: api/ReviewsDoPrestador/5 OK
         [HttpGet("ReviewsDoPrestador/{id}")]
         public async Task<ActionResult<object>> ReviewsDoPrestador(int id) 
         {
@@ -49,18 +49,25 @@ namespace BuscoBicoBackEnd.Controllers
         }
 
 
-        // GET: api/Reviews/5
+        // GET: api/Reviews/5 testar
         [HttpGet("{id}")]
-        public async Task<ActionResult<Review>> GetReview(int id)
+        public async Task<ActionResult<object>> GetReview(int id)
         {
-            var review = await _context.Reviews.FindAsync(id);
+            var review = await _context.Reviews.Where(rev => rev.Id == id).Select(
+                r=> new
+                {
+                    r.Id,r.Avaliacao, r.Comentario,
+                    Cliente= new { r.Autor.Id, r.Autor.Nome, r.Autor.Telefone, r.Autor.Localizacao },
+                    Prestador = new {r.Prestador.Id, r.Prestador.Nome,r.Prestador.Telefone,r.Prestador.Email,
+                    r.Prestador.Localizacao,r.Prestador.Funcao,r.Prestador.Descricao,r.Prestador.PrecoDiaria}
+                }).ToListAsync();
 
             if (review == null)
             {
                 return NotFound();
             }
 
-            return review;
+            return review[0];
         }
 
         // PUT: api/Reviews/5
@@ -77,6 +84,12 @@ namespace BuscoBicoBackEnd.Controllers
 
             try
             {
+                Review revFinal = new Review();
+                revFinal.Comentario = review.Comentario;
+                revFinal.Avaliacao = review.Avaliacao;
+                revFinal.Autor = _context.Clientes.Find(review.Autor.Id);
+                revFinal.Prestador = _context.Prestadores.Find(review.Prestador.Id);
+                _context.Reviews.Add(revFinal);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -94,7 +107,7 @@ namespace BuscoBicoBackEnd.Controllers
             return NoContent();
         }
 
-        // POST: api/Reviews
+        // POST: api/Reviews 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Review>> PostReview(Review review)

@@ -38,16 +38,26 @@ namespace BuscoBicoBackEnd.Controllers
 
         // GET: api/Clientes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cliente>> GetCliente(int id)
+        public async Task<ActionResult<object>> GetCliente(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
+            var cliente = await _context.Clientes.Where(cli => cli.Id == id)
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Nome,
+                    c.Telefone,
+                    c.Localizacao,
+                    Review = c.Reviews.Select(
+                        r => new { r.Id, r.Avaliacao, r.Comentario, Prestador = r.Prestador.Nome }).ToList()
+
+                }).ToListAsync();
 
             if (cliente == null)
             {
                 return NotFound();
             }
 
-            return cliente;
+            return cliente[0];
         }
 
         // PUT: api/Clientes/5

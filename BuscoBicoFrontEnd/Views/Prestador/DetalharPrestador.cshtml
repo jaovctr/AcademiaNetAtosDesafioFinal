@@ -75,7 +75,7 @@
                 Comentário
             </th>
             <th>
-                Avaliação (0 a 5)
+                Nota
             </th>
             <th>
                 Ações
@@ -87,17 +87,17 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(autor => review.Autor.Nome); 
+                        @Html.DisplayFor(autor => review.Autor.Nome) 
                     </td>
                     <td>
-                        @Html.DisplayFor(comentario => review.Comentario);
+                        @Html.DisplayFor(comentario => review.Comentario)
                     </td>
                     <td>
-                        @Html.DisplayFor(avaliacao => review.Avaliacao);
+                        @Html.DisplayFor(avaliacao => review.Avaliacao)
                     </td>
                     <td>
-                        @Html.ActionLink("Editar","EditarReview", new {id=review.Id})<br>
-                        @Html.ActionLink("Deletar","DeletarReview", new {id=review.Id})
+                        @Html.ActionLink("Editar","EditarReview", "Review",new {id=review.Id})<br>
+                        @Html.ActionLink("Deletar","DeletarReview", "Review", new {id=review.Id})
                     </td>
                 </tr>
             }                   
