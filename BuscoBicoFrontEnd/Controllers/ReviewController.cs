@@ -168,7 +168,7 @@ namespace BuscoBicoFrontEnd.Controllers
         }
 
         // GET: ReviewController/Delete/5
-        public ActionResult DelletarReview(int id)
+        public ActionResult DeletarReview(int id)
         {
             return View();
         }
