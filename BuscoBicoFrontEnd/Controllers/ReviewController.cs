@@ -91,7 +91,8 @@ namespace BuscoBicoFrontEnd.Controllers
                         baseurl + "api/Reviews", review);
                     
                 }
-                return RedirectToAction("ListarPrestador", "Prestador");
+         
+                return RedirectToAction("DetalharPrestador", "Prestador", new {id = reviewCriada.IdPrestador });
             }
             catch
             {
@@ -164,7 +165,7 @@ namespace BuscoBicoFrontEnd.Controllers
                     responseMessage = await httpClient.PutAsJsonAsync(
                         baseurl + "api/Reviews/" + id, review);
                 }
-                return RedirectToAction("ListarPrestador", "Prestador");
+                return RedirectToAction("DetalharPrestador", "Prestador", new { id = reviewModel.IdPrestador });
             }
             catch
             {
@@ -199,16 +200,25 @@ namespace BuscoBicoFrontEnd.Controllers
         {
             try
             {
+                int idPrestador=0;
+
                 using (var httpClient = new HttpClient())
                 {
                     httpClient.BaseAddress = new Uri(baseurl);
                     httpClient.DefaultRequestHeaders.Clear();
                     httpClient.DefaultRequestHeaders.Accept.Add(
                         new MediaTypeWithQualityHeaderValue("application/json"));
-                    HttpResponseMessage responseMessage = await httpClient.DeleteAsync("api/Reviews/" + id);
+                    HttpResponseMessage responseMessage = await httpClient.GetAsync("api/Reviews/" + id);
+                    if(responseMessage.IsSuccessStatusCode)
+                    {
+                        var dados = responseMessage.Content.ReadAsStringAsync().Result;
+                        ReviewModel review = JsonConvert.DeserializeObject<ReviewModel>(dados);
+                        idPrestador = review.Prestador.Id;
+                    }
+                    responseMessage = await httpClient.DeleteAsync("api/Reviews/" + id);
 
                 }
-                return RedirectToAction("ListarPrestador", "Prestador");
+                return RedirectToAction("DetalharPrestador", "Prestador", new { id = idPrestador });
             }
             catch
             {

@@ -34,8 +34,8 @@
 </div>
 <div>
     <hr />
-    @Html.ActionLink("Editar Cliente", "EditarCliente", new { id = Model.Id }) |
-    @Html.ActionLink("Deletar Cliente", "DeletarCliente", new { id = Model.Id }) |
+    @Html.ActionLink("Editar Cliente", "EditarCliente", new { id = Model.Id },new{@class="btn btn-outline-dark"})
+    @Html.ActionLink("Deletar Cliente", "DeletarCliente", new { id = Model.Id },new{@class="btn btn-outline-dark"})
     
-    <a asp-action="ListarCliente">Voltar para a lista</a>
+    <a class="btn btn-outline-dark" asp-action="ListarCliente">Voltar para a lista</a>
 </div>

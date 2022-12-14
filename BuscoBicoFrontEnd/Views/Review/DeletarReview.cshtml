@@ -34,7 +34,7 @@
     </dl>
     <hr />
     <form asp-action="DeletarReview">
-        <input type="submit" value="Apagar review" class="btn btn-danger" />
-        <a class="btn btn-secondary" asp-asp-controller="Prestador" asp-action="ListarPrestador">Voltar para a lista</a>
+        <input type="submit" value="Apagar review" class="btn btn-outline-danger" />
+        @Html.ActionLink("Voltar", "DetalharPrestador","Prestador", new { id=Model.Prestador.Id},new{@class="btn btn-outline-dark"})
     </form>
 </div>
